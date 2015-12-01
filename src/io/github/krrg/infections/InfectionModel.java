@@ -7,16 +7,17 @@ import io.github.krrg.Individual;
  */
 public abstract class InfectionModel {
 
-    private Individual individual;
+    protected Individual individual;
 
     public InfectionModel(Individual individual) {
         this.individual = individual;
     }
 
-    // If the individual is infected, then we
-    //  give the model an opportunity to infect the individual.
-    public abstract void expose(Individual other);
-    public abstract boolean isInfected()
+    public abstract void tick();
+    public abstract void exposeTo(Individual other);
+    public abstract boolean isContagious();
+    public abstract boolean isInfected();
+    public abstract boolean isDeceased();
 
 
 }

@@ -8,11 +8,10 @@ import java.util.Random;
 public class PositionGenerator {
 
     private static Random random = new Random();
+    public static final int MIN_DIM = 0;
+    public static final int MAX_DIM = 4096;
 
     private static int getRandomDimension() {
-        final int MIN_DIM = 0;
-        final int MAX_DIM = 4096;
-
         return random.nextInt(MAX_DIM) + MIN_DIM;
     }
 
