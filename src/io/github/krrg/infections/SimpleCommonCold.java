@@ -9,7 +9,6 @@ import java.util.List;
  * Created by krr428 on 11/30/15.
  *
  * An infection model representing the common cold.
- * Low number of initial indivduals
  */
 public class SimpleCommonCold extends InfectionModel {
 

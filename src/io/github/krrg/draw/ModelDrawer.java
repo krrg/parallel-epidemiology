@@ -1,5 +1,6 @@
 package io.github.krrg.draw;
 
+import io.github.krrg.Individual;
 import io.github.krrg.infections.InfectionModel;
 
 import java.awt.*;
@@ -9,12 +10,14 @@ import java.awt.*;
  */
 public class ModelDrawer {
 
-    /* TODO: Implement this function and determine the markers for different
-       combinations of health levels. */
-    public static void drawModel(InfectionModel model, Graphics2D g2d) {
-        if (! model.isInfected()) {
+    private Graphics2D g2d;
 
-        }
+    public ModelDrawer(Graphics2D g2d) {
+        this.g2d = g2d;
+    }
+
+    public void plotIndividual(Individual individual) {
+        final int gridx = Math.flooindividual.getPosition().getX()
     }
 
 }
