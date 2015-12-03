@@ -12,11 +12,10 @@ import java.util.List;
  */
 public class SimpleCommonCold extends InfectionModel {
 
-    private boolean isInfected = false;
     private List<Runnable> mutations;
 
-    public SimpleCommonCold(Individual individual) {
-        super(individual);
+    public SimpleCommonCold(Individual individual, boolean infected) {
+        super(individual, infected);
         mutations = new ArrayList<>();
     }
 
@@ -26,10 +25,10 @@ public class SimpleCommonCold extends InfectionModel {
     }
 
     private boolean isInfectedBy(Individual other) {
-        if (!other.isContagious()) {
+        if (!other.getInfectionModel().isContagious()) {
             return false;
         } else {
-            return other.getPosition().distanceTo(this.individual.getPosition()) < 20.0;
+            return other.getPosition().distanceTo(this.individual.getPosition()) < 50.0;
         }
     }
 
