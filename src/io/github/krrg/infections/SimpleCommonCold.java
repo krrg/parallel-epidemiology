@@ -10,25 +10,18 @@ import java.util.List;
  *
  * An infection model representing the common cold.
  */
-public class SimpleCommonCold extends InfectionModel {
+public class SimpleCommonCold extends IterativeInfectionModel {
 
-    private List<Runnable> mutations;
 
     public SimpleCommonCold(Individual individual, boolean infected) {
         super(individual, infected);
-        mutations = new ArrayList<>();
-    }
-
-    @Override
-    public void tick() {
-        mutations.stream().forEachOrdered((r) -> r.run());
     }
 
     private boolean isInfectedBy(Individual other) {
         if (!other.getInfectionModel().isContagious()) {
             return false;
         } else {
-            return other.getPosition().distanceTo(this.individual.getPosition()) < 50.0;
+            return other.getPosition().distanceTo(this.individual.getPosition()) < 96.0;
         }
     }
 
@@ -36,7 +29,7 @@ public class SimpleCommonCold extends InfectionModel {
     public void exposeTo(Individual other) {
 
         if (isInfectedBy(other)) {
-            mutations.add(() -> this.isInfected = true);
+            addMutation(() -> this.isInfected = true);
         }
 
     }

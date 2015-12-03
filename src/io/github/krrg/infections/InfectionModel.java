@@ -22,5 +22,9 @@ public abstract class InfectionModel {
     public boolean isInfected() {
         return isInfected;
     }
+    public boolean isImmune () {
+        return false;
+    }
+
 
 }

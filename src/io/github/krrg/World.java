@@ -1,6 +1,7 @@
 package io.github.krrg;
 
 import io.github.krrg.infections.InfectionModel;
+import io.github.krrg.infections.Measles;
 import io.github.krrg.infections.SimpleCommonCold;
 
 import java.util.HashSet;
@@ -33,15 +34,29 @@ public class World {
 
 class WorldFactory {
 
-    public static World createWorld(int populationSize) {
+    public static World createWorld() {
         World world = new World();
 
-        for (int i = 0; i < populationSize; i++) {
+        int populationSize = 1000;
+        final int INITIAL_INFECTED = 20;
+        final int IMMUNIZATION_LEVEL = 90;
+
+        for (int i = 0; i < INITIAL_INFECTED; i++) {
+            populationSize--;
             Individual individual = new Individual();
-            InfectionModel model = new SimpleCommonCold(individual, i < 50);
+            InfectionModel model = new Measles(individual, true);
             individual.setInfectionModel(model);
             world.addIndividual(individual);
         }
+
+        for (int i = 0; i < populationSize; i++) {
+            Individual individual = new Individual();
+            InfectionModel model = new Measles(individual, false, i % 100 <= IMMUNIZATION_LEVEL);
+            individual.setInfectionModel(model);
+            world.addIndividual(individual);
+        }
+
+        System.out.println(world.getPopulation().size());
 
         return world;
     }

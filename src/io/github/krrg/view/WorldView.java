@@ -3,15 +3,11 @@ package io.github.krrg.view;
 import io.github.krrg.Individual;
 import io.github.krrg.World;
 import io.github.krrg.draw.ModelDrawer;
-import io.github.krrg.geom.Position;
 import io.github.krrg.geom.PositionGenerator;
-import sun.awt.image.OffScreenImage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Date;
 
@@ -50,7 +46,7 @@ public class WorldView extends JPanel {
         }
 
         public void handleAutoTick(Runnable repaint) {
-            final int PAUSE_INTERVAL = 1;
+            final int PAUSE_INTERVAL = 250;
 
             new Timer(PAUSE_INTERVAL, (ActionEvent e) -> {
                 System.out.println("Updating at " + new Date());
@@ -70,6 +66,7 @@ public class WorldView extends JPanel {
 
     public WorldView (final World world) {
         controller = new WorldController(world);
+        worldReportView = new WorldReportView(world);
 
         this.initLayout();
         this.initComponents();
@@ -77,13 +74,21 @@ public class WorldView extends JPanel {
 
     private JPanel diseasePanel;
     private JPanel bottomPanel;
+    private WorldReportView worldReportView;
 
     private void initLayout() {
         this.setLayout(new BorderLayout());
     }
 
     private void initComponents() {
+
+        final int PANEL_WIDTH = 720;
+        final int PANEL_HEIGHT = 720;
+
+
         diseasePanel = new JPanel() {
+
+
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -93,15 +98,16 @@ public class WorldView extends JPanel {
                 g2d.setBackground(Color.black);
                 controller.handleDraw(bi.createGraphics());
 
-                g.drawImage(bi, 0, 0, 1024, 1024, null);
+                g.drawImage(bi, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, null);
             }
         };
         bottomPanel = new JPanel();
 
         diseasePanel.setLayout(null);
-        diseasePanel.setPreferredSize(new Dimension(1024, 1024));
-        diseasePanel.setMinimumSize(new Dimension(1024, 1024));
+        diseasePanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        diseasePanel.setMinimumSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 //        diseasePanel.setBackground(Color.BLACK);
+
 
         bottomPanel.setLayout(new FlowLayout());
 
@@ -120,8 +126,11 @@ public class WorldView extends JPanel {
 
         bottomPanel.add(tickButton);
         bottomPanel.add(autoTickButton);
+        bottomPanel.add(worldReportView);
 
-        this.add(diseasePanel, BorderLayout.CENTER);
+        JScrollPane diseaseScrollPane = new JScrollPane(diseasePanel);
+
+        this.add(diseaseScrollPane, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
