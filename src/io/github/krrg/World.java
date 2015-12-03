@@ -38,7 +38,7 @@ class WorldFactory {
 
         for (int i = 0; i < populationSize; i++) {
             Individual individual = new Individual();
-            InfectionModel model = new SimpleCommonCold(individual, i % 2 == 0);
+            InfectionModel model = new SimpleCommonCold(individual, i < 50);
             individual.setInfectionModel(model);
             world.addIndividual(individual);
         }

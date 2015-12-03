@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.Date;
 
 /**
  * Created by krr428 on 12/2/15.
@@ -46,6 +47,16 @@ public class WorldView extends JPanel {
                 i.getInfectionModel().tick();
             });
             // Join
+        }
+
+        public void handleAutoTick(Runnable repaint) {
+            final int PAUSE_INTERVAL = 1;
+
+            new Timer(PAUSE_INTERVAL, (ActionEvent e) -> {
+                System.out.println("Updating at " + new Date());
+                handleTick();
+                repaint.run();
+            }).start();
         }
 
         public void handleDraw(Graphics2D g2d) {
@@ -93,16 +104,22 @@ public class WorldView extends JPanel {
 //        diseasePanel.setBackground(Color.BLACK);
 
         bottomPanel.setLayout(new FlowLayout());
+
         JButton tickButton = new JButton();
         tickButton.setText("Single Tick");
-        tickButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                controller.handleTick();
-                diseasePanel.repaint();
-            }
+        tickButton.addActionListener(actionEvent -> {
+            controller.handleTick();
+            diseasePanel.repaint();
         });
+
+        JButton autoTickButton = new JButton();
+        autoTickButton.setText("Auto Run");
+        autoTickButton.addActionListener(actionEvent -> {
+            controller.handleAutoTick(diseasePanel::repaint);
+        });
+
         bottomPanel.add(tickButton);
+        bottomPanel.add(autoTickButton);
 
         this.add(diseasePanel, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);

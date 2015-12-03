@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args) {
-        World world = WorldFactory.createWorld(2000);
+        World world = WorldFactory.createWorld(32000);
 
         SwingUtilities.invokeLater(() -> {
             JFrame jf = new JFrame();
