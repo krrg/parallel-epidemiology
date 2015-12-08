@@ -30,6 +30,40 @@ public class World {
         population.clear();
     }
 
+    private int numDead;
+    private int numImmune;
+    private int numInfected;
+
+    public int getNumDead() {
+        return numDead;
+    }
+
+    public int getNumImmune() {
+        return numImmune;
+    }
+
+    public int getNumInfected() {
+        return numInfected;
+    }
+
+    public int getTotal() {
+        return getPopulation().size();
+    }
+
+    public void updateStats() {
+        numDead = getPopulation().parallelStream().mapToInt(individual -> {
+            return individual.getInfectionModel().isDeceased() ? 1 : 0;
+        }).parallel().sum();
+
+        numImmune = getPopulation().parallelStream().mapToInt(individual -> {
+            return individual.getInfectionModel().isImmune() ? 1 : 0;
+        }).parallel().sum();
+
+        numInfected = getPopulation().parallelStream().mapToInt(individual -> {
+            return individual.getInfectionModel().isInfected() ? 1 : 0;
+        }).parallel().sum();
+    }
+
 }
 
 class WorldFactory {

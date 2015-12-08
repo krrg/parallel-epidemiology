@@ -40,25 +40,10 @@ public class WorldReportView extends JPanel {
     }
 
     private void updateText() {
-
-        int numDead = world.getPopulation().parallelStream().mapToInt(individual -> {
-            return individual.getInfectionModel().isDeceased() ? 1 : 0;
-        }).parallel().sum();
-
-        int numImmune = world.getPopulation().parallelStream().mapToInt(individual -> {
-            return individual.getInfectionModel().isImmune() ? 1 : 0;
-        }).parallel().sum();
-
-        int numInfected = world.getPopulation().parallelStream().mapToInt(individual -> {
-            return individual.getInfectionModel().isInfected() ? 1 : 0;
-        }).parallel().sum();
-
-        int numTotal = world.getPopulation().size();
-
-        this.txtNumDead.setText("Dead: " + numDead);
-        this.txtNumImmune.setText("Immune: " + numImmune);
-        this.txtNumInfected.setText("Infected:" + numInfected);
-        this.txtTotalPopulation.setText("Population Size: " + numTotal);
+        this.txtNumDead.setText("Dead: " + world.getNumDead());
+        this.txtNumImmune.setText("Immune: " + world.getNumImmune());
+        this.txtNumInfected.setText("Infected:" + world.getNumInfected());
+        this.txtTotalPopulation.setText("Population Size: " + world.getTotal());
     }
 
     private void scheduleUpdates() {

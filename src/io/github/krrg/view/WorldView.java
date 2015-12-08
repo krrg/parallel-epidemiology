@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.util.Date;
+import java.util.function.BinaryOperator;
 
 /**
  * Created by krr428 on 12/2/15.
@@ -19,40 +20,29 @@ public class WorldView extends JPanel {
     private class WorldController {
 
         private World world;
+        private HeadlessWorldView headlessWorldView;
 
         public WorldController(World world) {
             this.world = world;
-        }
-
-        public void handleTick() {
-
-            // Fork
-            this.world.getPopulation().parallelStream().forEach((Individual i) -> {
-                this.world.getPopulation().stream().forEach((Individual other) -> {
-                    if (i == other) {
-                        return;
-                    }
-                    i.getInfectionModel().exposeTo(other);
-                });
-            });
-            // Join
-
-
-            // Fork
-            this.world.getPopulation().parallelStream().forEach((Individual i) -> {
-                i.getInfectionModel().tick();
-            });
-            // Join
+            this.headlessWorldView = new HeadlessWorldView(world);
         }
 
         public void handleAutoTick(Runnable repaint) {
             final int PAUSE_INTERVAL = 250;
 
-            new Timer(PAUSE_INTERVAL, (ActionEvent e) -> {
+            final Timer t = new Timer(PAUSE_INTERVAL, null);
+            t.addActionListener(actionEvent -> {
                 System.out.println("Updating at " + new Date());
-                handleTick();
+                boolean cont = headlessWorldView.handleTick();
+
                 repaint.run();
-            }).start();
+
+                if (!cont) {
+                    t.stop();
+                }
+            });
+
+            t.start();
         }
 
         public void handleDraw(Graphics2D g2d) {
@@ -114,7 +104,7 @@ public class WorldView extends JPanel {
         JButton tickButton = new JButton();
         tickButton.setText("Single Tick");
         tickButton.addActionListener(actionEvent -> {
-            controller.handleTick();
+            controller.headlessWorldView.handleTick();
             diseasePanel.repaint();
         });
 
